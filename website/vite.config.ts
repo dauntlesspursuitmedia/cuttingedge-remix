@@ -9,7 +9,7 @@ installGlobals();
 export default defineConfig({
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "./app"), // Replace with the correct path to your project root
+      "~/*": path.resolve(__dirname, "./app/*"), // Replace with the correct path to your project root
     },
   },
   plugins: [

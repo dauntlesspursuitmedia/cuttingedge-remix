@@ -8,10 +8,14 @@ import {
 } from "@remix-run/react";
 import { json } from "@vercel/remix";
 import { Suspense, lazy } from "react";
+import { loadQuery } from "./sanity/loader.server";
+import { SiteConfig } from "./sanity/types";
+import { SITE_CONFIG_QUERY } from "./sanity/queries";
 
 const LiveVisualEditing = lazy(() => import("~/components/LiveVisualEditing"));
 
-export const loader = () => {
+export const loader = async () => {
+  const initial = await loadQuery<SiteConfig>(SITE_CONFIG_QUERY, {});
   return json({
     ENV: {
       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,

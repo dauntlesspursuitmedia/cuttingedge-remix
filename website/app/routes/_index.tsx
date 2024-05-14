@@ -22,7 +22,7 @@ export default function Index() {
   const { initial, query, params } = useLoaderData<typeof loader>();
 
   const { data, loading, error } = useQuery(query, params, {
-    // @ts-expect-error
+    // @ts-expect-error typing needs some work
     initial,
   });
 
