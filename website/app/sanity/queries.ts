@@ -24,22 +24,26 @@ export const IMAGE_QUERY = groq`
 `;
 export const SERVICES_QUERY = groq`
     *[_type == "service"] {
+        _type,
         _id,
         title,
-        slug,
-        description,
+        "slug": slug.current,
+        description {
+            _type,
+            content[]
+        },
         category,
         image,
         _createdAt,
         _updatedAt,
         _rev,
-        _type
     }
 `;
 
 export const SITE_CONFIG_QUERY = groq`
 	*[_type == "siteConfig"][0]{
 		title,
+        _type,
 		url,
         logo {
             ${IMAGE_QUERY}

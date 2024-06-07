@@ -1,15 +1,23 @@
 import { z } from "zod";
-export interface Service {
-  _type: "service";
-  _id: string;
-  _rev: string;
-  _createdAt: string;
-  _updatedAt: string;
-  title: string;
-  slug: string;
-  description: string;
-  category: string;
-}
+
+export const serviceZ = z.object({
+  _type: z.literal("service"),
+  _id: z.string(),
+  _rev: z.string().nullish(),
+  _createdAt: z.string().nullish(),
+  _updatedAt: z.string().nullish(),
+  title: z.string(),
+  slug: z.string(),
+  description: z
+    .object({
+      _type: z.literal("richText"),
+      content: z.array(z.any()),
+    })
+    .nullish(),
+  category: z.string().nullish(),
+});
+
+export const servicesZ = z.array(serviceZ).nullish();
 
 export const routeStubZ = z.object({
   _id: z.string(),
@@ -74,7 +82,7 @@ export const configZ = z.object({
   mainNavigation: z.array(
     z.object({
       _type: z.literal("menuItem").optional(),
-      item: z.object({}),
+      item: menuItemZ.nullish(),
     })
   ),
   socialLinks: z.array(

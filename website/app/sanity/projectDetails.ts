@@ -20,6 +20,7 @@ export const projectId = SANITY_STUDIO_PROJECT_ID!;
 export const dataset = SANITY_STUDIO_DATASET!;
 export const studioUrl = SANITY_STUDIO_URL!;
 export const stegaEnabled = SANITY_STUDIO_STEGA_ENABLED === "true";
+export const apiVersion = "2024-03-20";
 
 if (!projectId) throw new Error("Missing SANITY_STUDIO_PROJECT_ID in .env");
 if (!dataset) throw new Error("Missing SANITY_STUDIO_DATASET in .env");

@@ -3,7 +3,7 @@ import { useQuery } from "@sanity/react-loader";
 import type { MetaFunction } from "@vercel/remix";
 import { loadQuery } from "~/sanity/loader.server";
 import { SERVICES_QUERY } from "~/sanity/queries";
-import { Service } from "~/sanity/types";
+import { serviceZ, servicesZ } from "~/sanity/types";
 import { PortableText } from "@portabletext/react";
 export const meta: MetaFunction = () => {
   return [
@@ -13,7 +13,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-  const initial = await loadQuery<Service[]>(SERVICES_QUERY);
+  const initial = await loadQuery(SERVICES_QUERY).then((res) => ({
+    ...res,
+    data: res.data ? servicesZ.parse(res.data) : null,
+  }));
 
   return { initial, query: SERVICES_QUERY, params: {} };
 };
@@ -21,10 +24,14 @@ export const loader = async () => {
 export default function Index() {
   const { initial, query, params } = useLoaderData<typeof loader>();
 
-  const { data, loading, error } = useQuery(query, params, {
-    // @ts-expect-error typing needs some work
-    initial,
-  });
+  const { data, loading, error } = useQuery<typeof initial.data>(
+    query,
+    params,
+    {
+      // @ts-expect-error typing needs some work
+      initial,
+    }
+  );
 
   console.log(data);
 
@@ -39,7 +46,7 @@ export default function Index() {
       {data?.map((service) => (
         <div key={service._id}>
           <h2>{service.title}</h2>
-          <PortableText value={service?.description.content} />
+          <PortableText value={service?.description?.content} />
           {/* <p>{service.description}</p> */}
         </div>
       ))}

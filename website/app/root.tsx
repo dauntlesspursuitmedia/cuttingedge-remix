@@ -9,13 +9,16 @@ import {
 import { json } from "@vercel/remix";
 import { Suspense, lazy } from "react";
 import { loadQuery } from "./sanity/loader.server";
-import { SiteConfig } from "./sanity/types";
+import { configZ } from "./sanity/types";
 import { SITE_CONFIG_QUERY } from "./sanity/queries";
 
 const LiveVisualEditing = lazy(() => import("~/components/LiveVisualEditing"));
 
 export const loader = async () => {
-  const initial = await loadQuery<SiteConfig>(SITE_CONFIG_QUERY, {});
+  const initial = await loadQuery(SITE_CONFIG_QUERY, {}).then((res) => ({
+    ...res,
+    data: res.data ? configZ.parse(res.data) : null,
+  }));
   return json({
     ENV: {
       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
