@@ -35,7 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     (res) => ({
       ...res,
       data: res.data ? configZ.parse(res.data) : undefined,
-    })
+    }),
   )
 
   return json({

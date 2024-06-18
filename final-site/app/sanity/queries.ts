@@ -40,6 +40,22 @@ export const SERVICES_QUERY = groq`
     }
 `
 
+export const HOME_QUERY = groq`
+    *[_type == "home" && route->slug.current == "home"][0]{
+        _id,
+        _type,
+        modules[] {
+            ...
+        },
+        route->{
+            _id,
+            _type,
+            title,
+            "slug":slug.current
+        }
+    }
+`
+
 export const SITE_CONFIG_QUERY = groq`
 	*[_type == "siteConfig"][0]{
 		title,
