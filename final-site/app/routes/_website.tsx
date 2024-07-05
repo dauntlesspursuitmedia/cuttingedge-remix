@@ -35,7 +35,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     (res) => ({
       ...res,
       data: res.data ? configZ.parse(res.data) : undefined,
-    }),
+    })
   )
 
   return json({
@@ -55,13 +55,12 @@ export default function Website() {
   })
   const { pathname } = useLocation()
   const { theme } = useOutletContext<{ theme: ThemePreference }>()
-
   return (
     <>
       <Header home={home} theme={theme} />
-      <div className="container mx-auto p-4 lg:p-12 grid grid-cols-1 gap-4 lg:gap-12">
+      <main className="container flex-1 mx-auto p-4 lg:p-12 grid grid-cols-1 gap-4 lg:gap-12">
         <Outlet />
-      </div>
+      </main>
       <Footer home={home} />
       {sanity.preview ? (
         <Suspense>

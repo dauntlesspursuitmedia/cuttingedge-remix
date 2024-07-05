@@ -13,6 +13,7 @@ import { themePreferenceCookie } from '~/cookies'
 import { getBodyClassNames } from '~/lib/getBodyClassNames'
 import styles from '~/tailwind.css?url'
 import { themePreference } from '~/types/themePreference'
+import { cn } from './lib/misc'
 
 export const links: LinksFunction = () => {
   return [
@@ -65,7 +66,7 @@ export default function App() {
         <link rel="icon" href="https://fav.farm/🚚" />
         <Links />
       </head>
-      <body className={bodyClassNames}>
+      <body className={cn(bodyClassNames, 'flex flex-col')}>
         <Outlet context={{ theme }} />
         <ScrollRestoration />
         <script

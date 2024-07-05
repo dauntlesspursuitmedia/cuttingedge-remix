@@ -1,6 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useQuery } from '@sanity/react-loader'
+import { Hero } from '~/components/modules/Hero'
+import { Page } from '~/components/Page'
 
 import type { loader as layoutLoader } from '~/routes/_website'
 import { loadQuery } from '~/sanity/loader.server'
@@ -42,11 +44,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Index() {
   const { initial, query, params } = useLoaderData<typeof loader>()
-  const { data } = useQuery<typeof initial.data>(query, params, {
+  const { data, loading } = useQuery<typeof initial.data>(query, params, {
     // There's a TS issue with how initial comes over the wire
     // @ts-expect-error
     initial,
   })
 
-  return data ? <pre>{JSON.stringify(data, null, 2)}</pre> : null
+  if (loading || !data) {
+    return <div>Loading...</div>
+  }
+
+  return <Page pageLayouts={data?.modules} />
 }

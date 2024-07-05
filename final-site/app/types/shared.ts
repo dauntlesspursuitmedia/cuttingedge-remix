@@ -78,12 +78,7 @@ export const configZ = z.object({
   _id: z.string(),
   url: z.string().nullish(),
   logo: imagePropsZ,
-  mainNavigation: z.array(
-    z.object({
-      _type: z.literal('menuItem').optional(),
-      item: menuItemZ.nullish(),
-    })
-  ),
+  mainNavigation: z.array(menuItemZ.nullish()),
   socialLinks: z
     .array(
       z.object({
@@ -94,5 +89,64 @@ export const configZ = z.object({
     )
     .nullish(),
 })
+
+export const actionZ = z.object({
+  _type: z.literal('action'),
+  actionType: z.string().nullish(),
+  isExternal: z.boolean().nullish(),
+  actionStyle: z
+    .object({
+      color: z.string().nullish(),
+      buttonStyle: z.string().nullish(),
+    })
+    .nullish(),
+  title: z.string().nullish(),
+  internalLink: z
+    .object({
+      slug: z.string().nullish(),
+    })
+    .nullish(),
+  externalLink: z.string().nullish(),
+  _key: z.string().nullish(),
+})
+export const heroModuleZ = z.object({
+  _type: z.literal('hero'),
+  _key: z.string(),
+  title: z.string(),
+  image: imagePropsZ,
+  action: actionZ.nullish(),
+})
+export const cardsModuleZ = z.object({
+  _type: z.literal('cardSection'),
+  heading: z.string().nullish(),
+  tagline: z.string().nullish(),
+  cards: z.array(z.any()).nullish(),
+  ctas: z.array(actionZ.nullish()).nullish(),
+})
+
+export const richTextModuleZ = z.object({
+  _type: z.literal('richText'),
+  _key: z.string(),
+  content: z.array(z.any()).nullish(),
+})
+
+export const textWithImageModuleZ = z.object({
+  _type: z.literal('textWithImage'),
+  _key: z.string(),
+  title: z.string(),
+  imagePlacement: z.string().default('left').nullish(),
+
+  image: imagePropsZ,
+  text: z.array(z.any()).nullish(),
+})
+
+export const pageModulesZ = z.array(
+  z.discriminatedUnion('_type', [
+    heroModuleZ,
+    cardsModuleZ,
+    richTextModuleZ,
+    textWithImageModuleZ,
+  ])
+)
 
 export type SiteConfig = z.infer<typeof configZ>
